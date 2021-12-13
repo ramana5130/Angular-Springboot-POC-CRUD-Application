@@ -1,1 +1,23 @@
-<p>employee-list works!</p>
+<div class="container-fluid">
+   <table class="table table-hover">
+       <thead>
+           <tr>
+               <th>FirstName</th>
+               <th>LastName</th>
+               <th>Gender</th>
+               <th>Email</th>
+               <th>Mobile</th>
+           </tr>
+       </thead>
+       <tbody>
+           <tr *ngFor="let emp of employees">
+               <td>{{emp.firstName}}</td>
+               <td>{{emp.lastName}}</td>
+               <td>{{emp.gender}}</td>
+               <td>{{emp.email}}</td>
+               <td>{{emp.mobile}}</td>
+              
+           </tr>
+       </tbody>
+   </table>
+</div>
