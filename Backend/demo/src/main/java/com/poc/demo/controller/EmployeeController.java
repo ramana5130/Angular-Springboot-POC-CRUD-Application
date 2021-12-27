@@ -1,6 +1,7 @@
 package com.poc.demo.controller;
 
 import com.poc.demo.entity.Employee;
+import com.poc.demo.exception.EmployeeNotFoundException;
 import com.poc.demo.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,14 +32,26 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/{id}")
-    public ResponseEntity<Optional<Employee>> getEmployee(@PathVariable Long id) {
-        Optional<Employee> employee = empService.getEmployee(id);
-        return new ResponseEntity<Optional<Employee>>(employee, HttpStatus.OK);
+    public ResponseEntity<?> getEmployee(@PathVariable Long id) {
+        /*Employee employee = empService.findOneEmployee(id);
+        return new ResponseEntity<Employee>(employee, HttpStatus.OK);*/
+
+        // Symbol ? is used at Generics to select datatype based on conditional execution
+        ResponseEntity<?> resp = null;
+        try {
+            Employee employee = empService.findOneEmployee(id);
+            resp = new ResponseEntity<Employee>(employee, HttpStatus.OK);
+        } catch (EmployeeNotFoundException e) {
+            e.printStackTrace();
+           // resp = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw e; // calls Global Handler
+        }
+        return resp;
     }
 
-    @PutMapping("employees/{id}")
+   /* @PutMapping("employees/{id}")
     public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee, @PathVariable("id") Long id) {
-        Optional<Employee> fetchedEmployee = empService.getEmployee(id);
+        Optional<Employee> fetchedEmployee = empService.findOneEmployee(id);
 
         if (fetchedEmployee.isPresent()) {
             Employee emp = fetchedEmployee.get();
@@ -53,13 +66,21 @@ public class EmployeeController {
         } else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 
     @DeleteMapping("employees/{id}")
-    public ResponseEntity<HttpStatus> deleteEmployeeById(@PathVariable ("id") Long id){
-        empService.deleteEmployee(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<String> deleteEmployee(@PathVariable("id") Long id) {
 
+        ResponseEntity<String> resp = null;
+        try {
+            empService.deleteEmployee(id);
+            resp = new ResponseEntity<String>("Employee Deleted", HttpStatus.OK);
+        } catch (EmployeeNotFoundException e) {
+            e.printStackTrace();
+           // resp = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw e; // calls Global Handler
+        }
+        return resp;
     }
 
 

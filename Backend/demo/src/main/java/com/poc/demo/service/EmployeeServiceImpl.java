@@ -1,15 +1,17 @@
 package com.poc.demo.service;
 
 import com.poc.demo.entity.Employee;
+import com.poc.demo.exception.EmployeeNotFoundException;
 import com.poc.demo.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EmployeeServiceImpl implements IEmployeeService{
+public class EmployeeServiceImpl implements IEmployeeService {
 
     @Autowired
     private EmployeeRepository repo;
@@ -26,9 +28,15 @@ public class EmployeeServiceImpl implements IEmployeeService{
     }
 
     @Override
-    public Optional<Employee> getEmployee(Long id) {
-        Optional<Employee> employee = repo.findById(id);
-        return employee;
+    public Employee findOneEmployee(Long id) {
+        /*Optional<Employee> employee = repo.findById(id);
+        if (employee.isPresent()) {
+            return employee.get();
+        } else {
+            throw new EmployeeNotFoundException("Employee '"+ id +"'not exist");
+        }*/
+
+        return repo.findById(id).orElseThrow(()-> new EmployeeNotFoundException("Employee '" + id + "' not exist"));
     }
 
     @Override
@@ -39,6 +47,8 @@ public class EmployeeServiceImpl implements IEmployeeService{
 
     @Override
     public void deleteEmployee(Long id) {
-        repo.deleteById(id);
+        //repo.deleteById(id);
+
+        repo.delete(findOneEmployee(id));
     }
 }

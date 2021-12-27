@@ -12,7 +12,7 @@ public interface IEmployeeService {
 
     public Employee saveEmployee(Employee employee);
 
-    public Optional<Employee> getEmployee(Long id);
+    public Employee findOneEmployee(Long id);
 
     public Employee updateEmployee(Employee employee);
 
