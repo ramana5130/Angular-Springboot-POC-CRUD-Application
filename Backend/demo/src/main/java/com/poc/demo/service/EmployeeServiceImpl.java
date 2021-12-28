@@ -6,6 +6,7 @@ import com.poc.demo.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,19 +37,35 @@ public class EmployeeServiceImpl implements IEmployeeService {
             throw new EmployeeNotFoundException("Employee '"+ id +"'not exist");
         }*/
 
-        return repo.findById(id).orElseThrow(()-> new EmployeeNotFoundException("Employee '" + id + "' not exist"));
+        return repo.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee '" + id + "' not exist"));
     }
 
     @Override
-    public Employee updateEmployee(Employee employee) {
-        Employee updatedEmp = repo.save(employee);
-        return updatedEmp;
+    public void updateEmployee(Employee employee) {
+        Long id = employee.getId();
+        if (id != null && repo.existsById(id)) {
+            //id exist in DB then
+            repo.save(employee);
+        } else {
+            throw new EmployeeNotFoundException("Employee '" + id + "' not exist");
+        }
     }
+
 
     @Override
     public void deleteEmployee(Long id) {
         //repo.deleteById(id);
 
         repo.delete(findOneEmployee(id));
+    }
+
+    @Override
+    @Transactional //this is custom method that's why explicitly writing @Transactional annotation
+    public int updateEmployeeFirstName(String fName, Long eId) {
+        if (eId != null && repo.existsById(eId)) {
+            return repo.updateEmployeeFirstName(fName, eId);
+        } else {
+            throw new EmployeeNotFoundException("Employee '" + eId + " not exist");
+        }
     }
 }

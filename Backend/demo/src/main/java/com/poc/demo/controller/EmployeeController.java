@@ -43,7 +43,7 @@ public class EmployeeController {
             resp = new ResponseEntity<Employee>(employee, HttpStatus.OK);
         } catch (EmployeeNotFoundException e) {
             e.printStackTrace();
-           // resp = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            // resp = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             throw e; // calls Global Handler
         }
         return resp;
@@ -68,6 +68,34 @@ public class EmployeeController {
         }
     }*/
 
+    @PutMapping("/modify")
+    public ResponseEntity<String> updateEmployee(@RequestBody Employee emp) {
+        ResponseEntity resp = null;
+        try {
+            empService.updateEmployee(emp);
+            resp = new ResponseEntity("Employee updated", HttpStatus.OK);
+        } catch (EmployeeNotFoundException e) {
+            e.printStackTrace();
+            throw e; // calls Global Handler
+        }
+        return resp;
+    }
+
+
+    @PatchMapping("/modify/name/{id}/{firstname}")
+    public ResponseEntity<String> updateEmpFirstName(@PathVariable Long id, @PathVariable String firstname) {
+        ResponseEntity resp = null;
+        try {
+            empService.updateEmployeeFirstName(firstname, id);
+            resp = new ResponseEntity<>("Employee FirstName Updated", HttpStatus.OK);
+        } catch (EmployeeNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return resp;
+    }
+
+
     @DeleteMapping("employees/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable("id") Long id) {
 
@@ -77,7 +105,7 @@ public class EmployeeController {
             resp = new ResponseEntity<String>("Employee Deleted", HttpStatus.OK);
         } catch (EmployeeNotFoundException e) {
             e.printStackTrace();
-           // resp = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            // resp = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             throw e; // calls Global Handler
         }
         return resp;

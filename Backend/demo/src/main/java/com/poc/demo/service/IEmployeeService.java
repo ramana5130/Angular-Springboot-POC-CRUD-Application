@@ -14,7 +14,10 @@ public interface IEmployeeService {
 
     public Employee findOneEmployee(Long id);
 
-    public Employee updateEmployee(Employee employee);
+    //public Employee updateEmployee(Employee employee);
+    public void updateEmployee(Employee employee);
 
     public void deleteEmployee(Long id);
+
+    public int updateEmployeeFirstName(String fName, Long eId);
 }
