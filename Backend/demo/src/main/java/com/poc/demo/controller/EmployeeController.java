@@ -3,6 +3,7 @@ package com.poc.demo.controller;
 import com.poc.demo.entity.Employee;
 import com.poc.demo.exception.EmployeeNotFoundException;
 import com.poc.demo.service.IEmployeeService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +26,14 @@ public class EmployeeController {
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
+    @ApiOperation(("Creating one employee"))
     @PostMapping("/employees")
     public ResponseEntity<Employee> saveEmp(@RequestBody Employee emp) {
         Employee savedEmployee = empService.saveEmployee(emp);
         return new ResponseEntity<Employee>(savedEmployee, HttpStatus.CREATED);
     }
 
+    @ApiOperation("Retrieve 1 employee")
     @GetMapping("/employees/{id}")
     public ResponseEntity<?> getEmployee(@PathVariable Long id) {
         /*Employee employee = empService.findOneEmployee(id);
@@ -81,7 +84,7 @@ public class EmployeeController {
         return resp;
     }
 
-
+    @ApiOperation("Modify 1 field employee")
     @PatchMapping("/modify/name/{id}/{firstname}")
     public ResponseEntity<String> updateEmpFirstName(@PathVariable Long id, @PathVariable String firstname) {
         ResponseEntity resp = null;
