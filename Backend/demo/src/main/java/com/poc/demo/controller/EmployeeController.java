@@ -26,12 +26,14 @@ public class EmployeeController {
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
+
     @ApiOperation(("Creating one employee"))
     @PostMapping("/employees")
     public ResponseEntity<Employee> saveEmp(@RequestBody Employee emp) {
         Employee savedEmployee = empService.saveEmployee(emp);
         return new ResponseEntity<Employee>(savedEmployee, HttpStatus.CREATED);
     }
+
 
     @ApiOperation("Retrieve 1 employee")
     @GetMapping("/employees/{id}")
@@ -105,7 +107,7 @@ public class EmployeeController {
         ResponseEntity<String> resp = null;
         try {
             empService.deleteEmployee(id);
-            resp = new ResponseEntity<String>("Employee Deleted", HttpStatus.OK);
+            resp = new ResponseEntity<String>("Employee '" + id + "'Deleted", HttpStatus.OK);
         } catch (EmployeeNotFoundException e) {
             e.printStackTrace();
             // resp = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

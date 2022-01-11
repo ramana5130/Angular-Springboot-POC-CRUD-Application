@@ -7,6 +7,7 @@
                <th>Gender</th>
                <th>Email</th>
                <th>Mobile</th>
+               <th>Operations</th>
            </tr>
        </thead>
        <tbody>
@@ -16,8 +17,15 @@
                <td>{{emp.gender}}</td>
                <td>{{emp.email}}</td>
                <td>{{emp.mobile}}</td>
+               <td>
+                   <button class="btn btn-danger" (click)="deleteEmployee(emp.id)">DELETE</button>
+               </td>
               
            </tr>
        </tbody>
    </table>
+   <div class="bg-success text-white text-center">
+    {{message}}
+   </div>
+  
 </div>
